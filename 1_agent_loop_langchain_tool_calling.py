@@ -1,3 +1,5 @@
+from typing import Literal
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -17,8 +19,14 @@ def get_product_price(product: str) -> str:
     return prices.get(product, "Product not found")
 
 @tool
-def apply_discount(price: float, discount_tier: float) -> float:
-    """Apply a discount tier to a price and return the discounted price"""
+def apply_discount(
+    price: float,
+    discount_tier: Literal["bronze", "silver", "gold"],
+) -> float:
+    """Apply a discount tier to a price and return the discounted price.
+
+    discount_tier must be one of: bronze (5%), silver (12%), gold (23%).
+    """
     print(f" >> Executing apply_discount tool for price: {price} and discount_tier: {discount_tier}")
     discount_percentages = {"bronze": 5, "silver": 12, "gold": 23}
     discount = discount_percentages.get(discount_tier, 0)
@@ -51,7 +59,9 @@ def run_agent(question: str) -> str:
                 "returned by get_product_price — do NOT pass a made-up number.\n"
                 "3. NEVER calculate discounts yourself using math. "
                 "Always use the apply_discount tool.\n"
-                "4. If the user does not specify a discount tier, "
+                "4. Pass discount_tier as the string bronze, silver, or gold "
+                "— not a number.\n"
+                "5. If the user does not specify a discount tier, "
                 "ask them which tier to use — do NOT assume one."
             )
         ),
@@ -88,9 +98,6 @@ def run_agent(question: str) -> str:
 
     print("ERROR: MAX iterations reached without a final answer")
     return None
-
-    agent = create_react_agent(llm, tools)
-    return agent.invoke({"question": question})
 
 if __name__ == "__main__":
     print("Hello LangChain Agent (.bind_tools)!")
