@@ -9,6 +9,7 @@ from langchain_tavily import TavilySearch
 
 load_dotenv()
 
+<<<<<<< HEAD
 class Source(BaseModel):
     """Schema for a source used by the agent"""
 
@@ -24,12 +25,10 @@ class AgentResponse(BaseModel):
 llm = ChatOpenAI(temperature=0, model="gpt-5.4-mini")
 tools = [TavilySearch(max_results=5)]
 agent = create_agent(model=llm, tools=tools, response_format=AgentResponse)
-
-
-def main():
-    print("Hello from langchain-course!")
-    result = agent.invoke({"messages": [HumanMessage(content="Search for 3 job postings for an AI engineer using langchain in the bay area on linkedin and list their details")]})
-    print(result)
+=======
+llm = ChatOpenAI(temperature=0, model="gpt-5.4-mini")
+tools = [TavilySearch(max_results=5)]
+agent = create_agent(model=llm, tools=tools)
 
 
 if __name__ == "__main__":
